@@ -1,0 +1,75 @@
+﻿<Window x:Class="sas_run.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:sas_run"
+        mc:Ignorable="d"
+        Title="SAS Batch Run"  SizeToContent="WidthAndHeight" ResizeMode="CanMinimize">
+    <Grid Height="670" Width="650">
+        <Button Height="30" Width="170" Margin="50,30,430,610" Click="ClickOpenFile">Select list</Button>
+        <Button Height="30" Width="170" Margin="240,30,240,610" Click="ClickSelectFiles">Select files</Button>
+        <Button Height="30" Width="170" Margin="430,30,50,610" Click="ClickSaveFiles">Save list</Button>
+        <Button Height="30" Width="100" Margin="50,570,500,70" Click="ClickRemove">Remove item</Button>
+        <Button Height="30" Width="100" Margin="170,570,380,70" Click="ClickClean">Clear list</Button>
+        <Button Height="30" Width="100" Margin="500,620,50,20" Click="ClickRun">Run</Button>
+        <CheckBox Height="20" Width="130" Margin="50,625,470,25" Name="LogCheck1">Generate LogCheck</CheckBox>
+        <CheckBox Height="20" Width="130" Margin="200,625,320,25" Name="LogCheck2">LogCheck Only
+            <CheckBox.Style>
+                <Style TargetType="{x:Type CheckBox}">
+                    <Setter Property="Visibility" Value="Hidden"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=LogCheck1, Path=IsChecked}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=LogCheck1, Path=IsChecked}" Value="False">
+                            <Setter Property="IsChecked" Value="False"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </CheckBox.Style>
+        </CheckBox>
+        <Button Height="30" Width="100" Margin="500,570,50,70" Click="ClickStatus">Clear statuses</Button>
+        <ListView Height="490" Margin="50,70,50,110" Name="listView1" VerticalContentAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True">
+            <ListView.Resources>
+                <DataTemplate x:Key="Templ">
+                    <TextBlock HorizontalAlignment="Left" Text="{Binding}"/>
+                </DataTemplate>
+                <Style x:Key="HeaderStyle" TargetType="GridViewColumnHeader">
+                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                </Style>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Status}" Value="Error">
+                            <Setter Property="Background" Value="#FFECE9" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Status}" Value="Warning">
+                            <Setter Property="Background" Value="#FFF7E9" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Status}" Value="Issue">
+                            <Setter Property="Background" Value="#FCFFE9" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Status}" Value="Ok">
+                            <Setter Property="Background" Value="#E1FFEA" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Status}" Value="Not exist">
+                            <Setter Property="Background" Value="#F1F1F1" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Status}" Value="SAS issue">
+                            <Setter Property="Background" Value="#F1F1F1" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Status}" Value="Aborted">
+                            <Setter Property="Background" Value="#FFECE9" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.Resources>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Program" HeaderTemplate="{StaticResource Templ}" HeaderContainerStyle="{StaticResource HeaderStyle}" Width="460" DisplayMemberBinding="{Binding Program}" />
+                    <GridViewColumn Header="Status" HeaderTemplate="{StaticResource Templ}" HeaderContainerStyle="{StaticResource HeaderStyle}" Width="65" DisplayMemberBinding="{Binding Status}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>
